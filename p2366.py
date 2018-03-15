@@ -1,10 +1,22 @@
 # Phat Phan
 # La Salle University, CSC366, Spring 2018
 # Infix to Postfix
-#https://www.python.org/downloads/release/python-364/
+# https://www.python.org/downloads/
+# The project is written on Python 3 version
 
-#Define class stack that has 6 methods. we will use push and pop
-#Their others 4 are used for checking
+import sys
+import string
+# re class is the regex class that help dealing with variables that contain 2 or more letter for example a1, a2, om
+import re
+
+# The advantage of python 3 is that when it breaks the in put into token. each token will automatically seperate by blank space.
+# for example A1 + 6 will give A1 6 +
+
+# The diadvantage is when users input without anyspace. there will be error. For example, a+5, a+ 5 because when
+# it splits the input, it will se a+5 or a+ as a whole token
+
+# Define class stack that has 5 methods. we will use push and pop and peak to work on each token
+# Their others 4 are used for checking
 class Stack:
     def __init__(self):
         self.items = []
@@ -17,14 +29,15 @@ class Stack:
 
     def pop(self):
         return self.items.pop()
-
+    # go back 1 position in the stack
     def peek(self):
         return self.items[len(self.items)-1]
 
     def size(self):
         return len(self.items)
-    
-def infixToPostfix(infixexpr):
+       
+# method to convert infix to postfix    
+def infixToPostfix(userInput):
     prec = {}
     prec["^"] = 3
     prec["%"] = 2
@@ -34,45 +47,50 @@ def infixToPostfix(infixexpr):
     prec["-"] = 1
     prec["("] = 0
     
-	#create a stack name 
-    lexeme = Stack()
+    #create a stack to hole the left parentthesis and all operations +-*/%^ 
+    operation = Stack()
 	
-	#create the array that like the lexeme array 
+    #create the array that holds postfix output
     postfixList = []
-	#array to hold breaking down input as tokens
-    tokenList = infixexpr.split()
+    
+    #array to hold breaking down input as tokens
+    tokenList = userInput.split()
 
-	# if the token is 
+    # loop throught each token
+    # check if each token is a variable, number, letter, or left-right parentthesis
+    # when it sees a  right parentthesis meaning the end of a expression(it may a small expression inside a bigger epression)
+    # it will pop  everything in the operation stack to the postfixList
     for token in tokenList:
-        if token in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" or token in "0123456789":
+        if re.search('[a-zA-Z]', token) or token in str(list(range(10000))):
             postfixList.append(token)
         elif token == '(':
-            lexeme.push(token)
+            operation.push(token)
         elif token == ')':
-            topToken = lexeme.pop()
+            topToken = operation.pop()
             while topToken != '(':
                 postfixList.append(topToken)
-                topToken = lexeme.pop()
+                topToken = operation.pop()
         else:
-            while (not lexeme.isEmpty()) and \
-               (prec[lexeme.peek()] >= prec[token]):
-                  postfixList.append(lexeme.pop())
-            lexeme.push(token)
+            while (not operation.isEmpty()) and \
+               (prec[operation.peek()] >= prec[token]):
+                  postfixList.append(operation.pop())
+            operation.push(token)
 
-    while not lexeme.isEmpty():
-        postfixList.append(lexeme.pop())
+    while not operation.isEmpty():
+        postfixList.append(operation.pop())
     return " ".join(postfixList)
 
-
-
-
-
+# Postfix evaluation method, if the expressions contain just number
+# it will calculate output
 def postfixEval(postfixExpr):
+    #create stack to hold all arimitic operations
     operandStack = Stack()
+    # postfixExpr is the result of inFixtoPostfix method
     tokenList = postfixExpr.split()
 
+    # Loop through the list
     for token in tokenList:
-        if token in "0123456789":
+        if token in str(list(range(19998))):
             operandStack.push(int(token))
         else:
             operand2 = operandStack.pop()
@@ -81,6 +99,7 @@ def postfixEval(postfixExpr):
             operandStack.push(result)
     return operandStack.pop()
 
+# method to calculate the posfix
 def doMath(op, op1, op2):
     if op == "*":
         return op1 * op2
@@ -96,31 +115,36 @@ def doMath(op, op1, op2):
         return op1 - op2
 
 
+# This is the main method that will call other method
+def main():
+    # A loop to ask user if they want to continue or not
+    while True:
+# Read user input
+        expression = input('Please enter your expression!\n')
 
+# Check if input contain just characters, number, or both
+# If input contain just characters or both characters and number,
+# then use infixtoposstfix method without evaluation
+# If the input contain just number then evaluate it.
 
+        c=True
+        check = expression.split()
+        for char in check:
+            if re.search('[a-zA-Z]', char):
+                c=False
 
+        if c:
+            print(postfixEval(infixToPostfix(expression)))
+        else:
+            print(infixToPostfix(expression))
 
+# Ask user if they want to continue        
+        again = input("\nDo you want to continue?  Y/N\n").lower()
+        if again == "y":
+            continue
+        else:
+            break 
+    sys.exit()
 
-
-
-
-#read user input. Then break it into single chracter in tokenList
-expression = input('Please enter your expression!\n')
-print(infixToPostfix("( A + D * F ) ^ 2 + C - ( O - P )"))
-print(infixToPostfix("( A + B ) * C - ( D - E ) * ( F + G )"))
-
-
-print(infixToPostfix(expression))
-
-
-c=True
-check = expression.split()
-for char in check:
-    if char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-        c=False
-
-
-if c:
-    print(postfixEval(infixToPostfix(expression)))
-else:
-    print(infixToPostfix(expression))
+if  __name__ =='__main__':
+    main()
