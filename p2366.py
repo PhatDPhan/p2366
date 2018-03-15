@@ -6,14 +6,14 @@
 
 import sys
 import string
-# re class is the regex class that help dealing with variables that contain 2 or more letter for example a1, a2, om
+# re class is the regex class that help dealing with variables that contain 2 or more letter for example a1, a2, or omg
 import re
 
 # The advantage of python 3 is that when it breaks the in put into token. each token will automatically seperate by blank space.
 # for example A1 + 6 will give A1 6 +
 
 # The diadvantage is when users input without anyspace. there will be error. For example, a+5, a+ 5 because when
-# it splits the input, it will se a+5 or a+ as a whole token
+# it splits the input, it will see a+5 or a+ as a whole token
 
 # Define class stack that has 5 methods. we will use push and pop and peak to work on each token
 # Their others 4 are used for checking
@@ -83,7 +83,7 @@ def infixToPostfix(userInput):
 # Postfix evaluation method, if the expressions contain just number
 # it will calculate output
 def postfixEval(postfixExpr):
-    #create stack to hold all arimitic operations
+    # create stack to hold all arimitic operations
     operandStack = Stack()
     # postfixExpr is the result of inFixtoPostfix method
     tokenList = postfixExpr.split()
@@ -134,8 +134,12 @@ def main():
                 c=False
 
         if c:
+            print("This is the Postfix:")
+            print(infixToPostfix(expression))
+            print("This is the evaluation result:")
             print(postfixEval(infixToPostfix(expression)))
         else:
+            print("This is the Postfix:")
             print(infixToPostfix(expression))
 
 # Ask user if they want to continue        
