@@ -9,7 +9,7 @@ import string
 
 # re class is the regex class that help dealing with variables that contain 2 or more letter for example a1, a2, 9562 or omg
 import re
-# Kevin provided a buid in ethod of python that can handle better then regex. they are isalnum() and isdigit()
+# Kevin provided two buid-in methods of python that can handle better then regex. they are isalnum() and isdigit()
 # However, in the loop to ask users if they want to do another expression, it's simplier with regex
 
 # The advantage of python 3 is that when it breaks the in put into tokens. each token will automatically seperate by blank space.
