@@ -65,6 +65,7 @@ def infixToPostfix(userInput):
     # when it sees a  right parentthesis meaning the end of an expression(it may a small expression inside a bigger epression)
     # it will pop  everything in the operation stack to the postfixList
     for token in tokenList:
+        # if re.search('[a-zA-Z]', token) or token in str(list(range(10000))): old manualy check
         if token.isalnum():
             postfixList.append(token)
         elif token == '(':
@@ -95,6 +96,7 @@ def postfixEval(postfixExpr):
     # it checks 3 tokens from left to right at a time
     # for example 6 3 + 6 - meaning 6 + 3 = 9 then 9 - 6 = 3
     for token in tokenList:
+        # if token in str(list(range(19998))): old manualy check
         if token.isdigit():
             operandStack.push(int(token))
         else:
