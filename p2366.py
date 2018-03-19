@@ -1,19 +1,23 @@
-# Phat Phan
+# Phat Phan, Kenvin Sie
 # La Salle University, CSC366, Spring 2018
-# Infix to Postfix
-# https://www.python.org/downloads/
+# Project 2: Infix to Postfix
+# Dowload link: https://www.python.org/downloads/
 # The project is written on Python 3 version
 
 import sys
 import string
-# re class is the regex class that help dealing with variables that contain 2 or more letter for example a1, a2, or omg
-import re
 
-# The advantage of python 3 is that when it breaks the in put into token. each token will automatically seperate by blank space.
+# re class is the regex class that help dealing with variables that contain 2 or more letter for example a1, a2, 9562 or omg
+import re
+# Kevin provided a buid in ethod of python that can handle better then regex. they are isalnum() and isdigit()
+# However, in the loop to ask users if they want to do another expression, it's simplier with regex
+
+# The advantage of python 3 is that when it breaks the in put into tokens. each token will automatically seperate by blank space.
 # for example A1 + 6 will give A1 6 +
 
 # The diadvantage is when users input without anyspace. there will be error. For example, a+5, a+ 5 because when
 # it splits the input, it will see a+5 or a+ as a whole token
+# Kevin provided fix_space method to handle tokens with or without space
 
 # Define class stack that has 5 methods. we will use push and pop and peak to work on each token
 # Their others 4 are used for checking
@@ -47,21 +51,21 @@ def infixToPostfix(userInput):
     prec["-"] = 1
     prec["("] = 0
     
-    #create a stack to hole the left parentthesis and all operations +-*/%^ 
+    #create a stack to hold the left parentthesis and all operations +-*/%^ and variables
     operation = Stack()
 	
     #create the array that holds postfix output
     postfixList = []
     
     #array to hold breaking down input as tokens
-    tokenList = userInput.split()
+    tokenList = fix_spaces(userInput).split()
 
     # loop throught each token
     # check if each token is a variable, number, letter, or left-right parentthesis
-    # when it sees a  right parentthesis meaning the end of a expression(it may a small expression inside a bigger epression)
+    # when it sees a  right parentthesis meaning the end of an expression(it may a small expression inside a bigger epression)
     # it will pop  everything in the operation stack to the postfixList
     for token in tokenList:
-        if re.search('[a-zA-Z]', token) or token in str(list(range(10000))):
+        if token.isalnum():
             postfixList.append(token)
         elif token == '(':
             operation.push(token)
@@ -71,11 +75,10 @@ def infixToPostfix(userInput):
                 postfixList.append(topToken)
                 topToken = operation.pop()
         else:
-            while (not operation.isEmpty()) and \
-               (prec[operation.peek()] >= prec[token]):
-                  postfixList.append(operation.pop())
+            while (not operation.isEmpty()) and (prec[operation.peek()] >= prec[token]):
+                postfixList.append(operation.pop())
             operation.push(token)
-
+    #pop out everything in the operation stack
     while not operation.isEmpty():
         postfixList.append(operation.pop())
     return " ".join(postfixList)
@@ -83,14 +86,16 @@ def infixToPostfix(userInput):
 # Postfix evaluation method, if the expressions contain just number
 # it will calculate output
 def postfixEval(postfixExpr):
-    # create stack to hold all arimitic operations
+    # create stack to hold all arimitic operations and number
     operandStack = Stack()
     # postfixExpr is the result of inFixtoPostfix method
     tokenList = postfixExpr.split()
 
     # Loop through the list
+    # it checks 3 tokens from left to right at a time
+    # for example 6 3 + 6 - meaning 6 + 3 = 9 then 9 - 6 = 3
     for token in tokenList:
-        if token in str(list(range(19998))):
+        if token.isdigit():
             operandStack.push(int(token))
         else:
             operand2 = operandStack.pop()
@@ -113,6 +118,18 @@ def doMath(op, op1, op2):
         return op1 ** op2
     else:
         return op1 - op2
+
+
+# Kenvin gave a great method: strip spaces out and replace them with ones we want
+def fix_spaces(string):
+    precedence = ["^", "%", "*", "/", "+", "-", "(", ")"]
+
+    temp = string.replace(" ", "")
+
+    for tok in temp:
+        if tok in precedence:
+            temp = temp.replace(tok, " " + tok + " ")
+    return temp
 
 
 # This is the main method that will call other method
