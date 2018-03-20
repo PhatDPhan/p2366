@@ -12,7 +12,7 @@ import re
 # Kevin provided two buid-in methods of python that can handle better then regex. they are isalnum() and isdigit()
 # However, in the loop to ask users if they want to do another expression, it's simplier with regex
 
-# The advantage of python 3 is that when it breaks the in put into tokens. each token will automatically seperate by blank space.
+# The advantage of python 3 is that when it breaks the input into tokens. each token will automatically be seperated by blank space.
 # for example A1 + 6 will give A1 6 +
 
 # The diadvantage is when users input without anyspace. there will be error. For example, a+5, a+ 5 because when
@@ -79,7 +79,7 @@ def infixToPostfix(userInput):
             while (not operation.isEmpty()) and (prec[operation.peek()] >= prec[token]):
                 postfixList.append(operation.pop())
             operation.push(token)
-    #pop out everything in the operation stack
+    #pop out everything in the operation stack to the postfixList
     while not operation.isEmpty():
         postfixList.append(operation.pop())
     return " ".join(postfixList)
