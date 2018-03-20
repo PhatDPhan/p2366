@@ -1,4 +1,4 @@
-# Phat Phan, Kenvin Sie
+# Phat Phan, Kevin Sie
 # La Salle University, CSC366, Spring 2018
 # Project 2: Infix to Postfix
 # Dowload link: https://www.python.org/downloads/
@@ -122,7 +122,7 @@ def doMath(op, op1, op2):
         return op1 - op2
 
 
-# Kenvin gave a great method: strip spaces out and replace them with ones we want
+# Kevin gave a great method: strip spaces out and replace them with ones we want
 def fix_spaces(string):
     precedence = ["^", "%", "*", "/", "+", "-", "(", ")"]
 
@@ -141,7 +141,7 @@ def main():
 # Read user input
         expression = input('Please enter your expression!\n')
 
-# Check if input contain just characters, number, or both
+# Check if input contains just characters, number, or both
 # If input contain just characters or both characters and number,
 # then use infixtoposstfix method without evaluation
 # If the input contain just number then evaluate it.
